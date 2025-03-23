@@ -1,17 +1,22 @@
 [
     {
         "id_client": 1,
-        "string": "Ceci est un exemple de texte",
-        "localisation": null
+        "localisation": null,
+        "string": "Ceci est un exemple de texte"
     },
     {
         "id_client": 2,
-        "string": "Un autre texte",
-        "localisation": null 
+        "localisation": null,
+        "string": "Un autre texte"
     },
     {
         "id_client": 3,
-        "string": "Encore un texte",
-        "localisation": null
+        "localisation": null,
+        "string": "Encore un texte"
+    },
+    {
+        "id_client": 4,
+        "localisation": "Marseille, France",
+        "string": "Nouveau texte"
     }
 ]
