@@ -6,9 +6,24 @@ app.secret_key = 'test'
 def load_users():
     with open('db/login_db.json', 'r') as file:
         return json.load(file)
-
+def load_data():
+    with open('plate_db.json', 'r') as file:
+        return json.load(file)
+def save_data(data):
+    with open('plate_db.json', 'w') as file:
+        json.dump(data, file, indent=4)
 def hash_password(password):
     return hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+def add_entry(id_client, string, localisation=None):
+    data = load_data()
+    new_entry = {
+        "id_client": id_client,
+        "string": string,
+        "localisation": localisation
+    }
+    data.append(new_entry)
+    save_data(data)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -26,6 +41,18 @@ def login():
 
 
     return render_template('login.html')
+
+@app.route('/add', methods=['POST'])
+def add():
+    id_client = request.json.get('id_client')
+    string = request.json.get('string')
+    localisation = request.json.get('localisation')
+
+    if not id_client or not string:
+        return jsonify({"error": "id_client et string sont obligatoires"}), 400
+
+    add_entry(id_client, string, localisation)
+    return jsonify({"message": "Entrée ajoutée avec succès"}), 201
 
 @app.route('/')
 def home():

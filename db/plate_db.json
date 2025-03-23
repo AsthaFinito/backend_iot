@@ -1,0 +1,17 @@
+[
+    {
+        "id_client": 1,
+        "string": "Ceci est un exemple de texte",
+        "localisation": null
+    },
+    {
+        "id_client": 2,
+        "string": "Un autre texte",
+        "localisation": null 
+    },
+    {
+        "id_client": 3,
+        "string": "Encore un texte",
+        "localisation": null
+    }
+]
