@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import os
 from flask import Flask, flash, json, redirect, render_template, request, jsonify, session, url_for
 import hashlib
@@ -23,7 +23,37 @@ def distance_haversine(lat1, lon1, lat2, lon2):
     return distance
 
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
+    
+    @app.template_filter('time_since')
+    def time_since(timestamp_str):
+        """Calcule le temps écoulé en minutes depuis le timestamp"""
+        if not timestamp_str:
+            return "Inactif"
+        
+        try:
+            if timestamp_str.endswith('Z'):
+                timestamp = datetime.strptime(timestamp_str, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+            else:
+                timestamp = datetime.fromisoformat(timestamp_str)
+            
+            delta = datetime.now(timezone.utc) - timestamp
+            minutes = int(delta.total_seconds() / 60)
+            
+            if minutes < 1:
+                return "À l'instant"
+            elif minutes < 60:
+                return f"{minutes} min"
+            else:
+                hours = minutes // 60
+                return f"{hours}h{minutes % 60:02d}"
+        except (ValueError, TypeError):
+            return "not know"
+    
+    return app
+
+app = create_app()
 app.secret_key = 'test'
 def load_users():
     with open('db/login_db.json', 'r') as file:
@@ -183,14 +213,22 @@ def dashboard():
     username = session['username']
     friends_db = load_friends()
     friend_ids = friends_db.get(str(user_id), [])
+    print(friend_ids)
     users_db = load_users()
+    
     friends = []
     for friend_id in friend_ids:
+        latest_pos=get_latest_pos(transform_username_to_clientid(friend_id))
         friend = next((u for u in users_db if u['id_client'] == transform_username_to_clientid(friend_id)), None)
         if friend:
-            friends.append(friend['username'])
+             friends.append({
+                'username': friend['username'],
+                'last_seen': latest_pos.get('timestamp') if latest_pos else None,
+            })
     
     return render_template('dashboard.html', username=username,friends=friends)
+
+
 
 @app.route('/logout')
 def logout():

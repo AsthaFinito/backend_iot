@@ -1,6 +1,6 @@
 {
     "1": ["alice", "charlie", "eve"],
-    "2": ["bob", "clientA"],
+    "2": ["bob"],
     "3": ["alice", "leo"],
     "4": ["bob", "eve", "grace"],
     "5": ["charlie", "henry"],

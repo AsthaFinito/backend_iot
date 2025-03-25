@@ -13,8 +13,14 @@
             <ul class="list-group">
                 {% for friend in friends %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    {{ friend }}
-                    <span class="badge bg-primary rounded-pill">En ligne</span>
+                    {{ friend.username }}
+                    <span class="badge rounded-pill 
+                        {% if not friend.last_seen %}bg-secondary
+                        {% elif friend.last_seen|time_since == "À l'instant" %}bg-success
+                        {% elif "min" in friend.last_seen|time_since %}bg-primary
+                        {% else %}bg-warning text-dark{% endif %}">
+                        {{ friend.last_seen|time_since }}
+                    </span>
                 </li>
                 {% endfor %}
             </ul>
