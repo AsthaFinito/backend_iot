@@ -24,7 +24,7 @@ def load_users():
     with open('db/login_db.json', 'r') as file:
         return json.load(file)
 def load_friends():
-    with open('db/friends_db.json', 'r') as file:
+    with open('db/friend_db.json', 'r') as file:
         return json.load(file)
 def load_data():
     with open('db/plate_db.json', 'r') as file:
@@ -63,6 +63,25 @@ def add_latest_pos(id_client, lat, long):
     }
     save_latest_positions(positions)
 
+def get_friends(client_id):
+    if client_id in (None, ""):
+        raise ValueError("L'ID client ne peut pas être vide")
+    friends_data = load_friends() if callable(load_friends) else {}
+    return list(friends_data.get(str(client_id), []))
+
+
+def get_latest_pos(client_id):
+    positions = load_latest_positions()
+    client_pos = positions.get(str(client_id))
+    
+    if client_pos:
+        return {
+            'lat': client_pos['lat'],
+            'long': client_pos['long'],
+            'timestamp': client_pos.get('timestamp')
+        }
+    return None
+
 
 def add_entry(id_client, string, lat,long):
     data = load_data()
@@ -74,6 +93,8 @@ def add_entry(id_client, string, lat,long):
     }
     data.append(new_entry)
     add_latest_pos(id_client, lat, long)
+    print(get_latest_pos(id_client)) 
+    print(get_friends(id_client))
     save_data(data)
 
 @app.route('/login', methods=['GET', 'POST'])
