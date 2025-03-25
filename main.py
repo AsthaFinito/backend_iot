@@ -1,3 +1,5 @@
+import datetime
+import os
 from flask import Flask, flash, json, redirect, render_template, request, jsonify, url_for
 import hashlib
 import math
@@ -27,6 +29,15 @@ def load_friends():
 def load_data():
     with open('db/plate_db.json', 'r') as file:
         return json.load(file)
+def load_latest_positions():
+    if not os.path.exists('db/positions_db.json'):
+        return {}
+    with open('db/positions_db.json', 'r') as file:
+        return json.load(file)
+def save_latest_positions(data):
+    os.makedirs('db', exist_ok=True)
+    with open('db/positions_db.json', 'w') as file:
+        json.dump(data, file, indent=4)
 def save_data(data):
     with open('db/plate_db.json', 'w') as file:
         json.dump(data, file, indent=4)
@@ -43,6 +54,15 @@ def is_plate_present(my_string):
     except (json.JSONDecodeError, TypeError):
         return False
 
+def add_latest_pos(id_client, lat, long):
+    positions = load_latest_positions()
+    positions[str(id_client)] = {
+        "lat": lat,
+        "long": long,
+        "timestamp": datetime.datetime.now().isoformat()  # Optionnel: ajoute un timestamp
+    }
+    save_latest_positions(positions)
+
 
 def add_entry(id_client, string, lat,long):
     data = load_data()
@@ -53,6 +73,7 @@ def add_entry(id_client, string, lat,long):
         "long": long
     }
     data.append(new_entry)
+    add_latest_pos(id_client, lat, long)
     save_data(data)
 
 @app.route('/login', methods=['GET', 'POST'])

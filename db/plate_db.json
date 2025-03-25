@@ -49,5 +49,35 @@
         "id_client": 4,
         "localisation": null,
         "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
     }
 ]
