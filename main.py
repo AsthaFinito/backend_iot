@@ -141,6 +141,10 @@ def add_entry(id_client, string, lat,long):
     print(get_nearby_friends(id_client))
     save_data(data)
 
+def is_clientid_present(client_id):
+    users = load_users()  
+    return any(user["id_client"] == int(client_id) for user in users)
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -168,6 +172,8 @@ def add():
     if not id_client or not string:
         return jsonify({"error": "id_client et string sont obligatoires"}), 400
 
+    if not is_clientid_present(id_client):
+        return jsonify({"error": f"Client ID {id_client} non trouvé"}), 404
     add_entry(id_client, string, lat,long)
     if is_plate_present(string):
         print("USEFULL PLATE DETECT")
