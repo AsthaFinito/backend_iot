@@ -1,5 +1,14 @@
 {
-    "4": ["toto", "bob"],
-    "3": ["clientA"],
-    "ID_CLIENT": ["clientA"]
+    "1": ["alice", "charlie", "eve"],
+    "2": ["bob", "clientA"],
+    "3": ["alice", "leo"],
+    "4": ["bob", "eve", "grace"],
+    "5": ["charlie", "henry"],
+    "6": ["jack", "kate"],
+    "7": ["alice", "irene"],
+    "8": ["eve", "leo"],
+    "9": ["grace", "jack"],
+    "10": ["frank", "irene"],
+    "11": ["frank", "leo"],
+    "12": ["henry", "kate"]  
 }

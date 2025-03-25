@@ -1,5 +1,4 @@
 [
-
     {
         "who_is_looking": "assurance toto",
         "plate": "DK-802-DV"
@@ -7,6 +6,77 @@
     {
         "who_is_looking": "police tata",
         "plate": "DK-802-DW"
+    },
+    {
+        "who_is_looking": "gendarmerie nationale",
+        "plate": "AB-123-CD",
+        "context": "recherche véhicule volé"
+    },
+    {
+        "who_is_looking": "assurance mif",
+        "plate": "EF-456-GH",
+        "context": "dossier sinistre #45678"
+    },
+    {
+        "who_is_looking": "police municipale Lyon",
+        "plate": "IJ-789-KL",
+        "context": "stationnement gênant récurrent"
+    },
+    {
+        "who_is_looking": "service des impôts",
+        "plate": "MN-012-OP",
+        "context": "contrôle TVA non payée"
+    },
+    {
+        "who_is_looking": "compagnie d'autoroute",
+        "plate": "QR-345-ST",
+        "context": "péage impayé"
+    },
+    {
+        "who_is_looking": "assurance AXA",
+        "plate": "UV-678-WX",
+        "context": "expertise accident"
+    },
+    {
+        "who_is_looking": "police judiciaire",
+        "plate": "YZ-901-BC",
+        "context": "enquête criminelle",
+        "priority": "high"
+    },
+    {
+        "who_is_looking": "service de remorquage",
+        "plate": "DE-234-FG",
+        "context": "véhicule en fourrière"
+    },
+    {
+        "who_is_looking": "douanes françaises",
+        "plate": "HI-567-JK",
+        "context": "contrebande suspectée"
+    },
+    {
+        "who_is_looking": "assurance MAIF",
+        "plate": "LM-890-NO",
+        "context": "dossier résiliation"
+    },
+    {
+        "who_is_looking": "police nationale - BRI",
+        "plate": "PQ-123-RS",
+        "context": "surveillance active",
+        "alert_type": "danger"
+    },
+    {
+        "who_is_looking": "mairie de Paris",
+        "plate": "TU-456-VW",
+        "context": "infraction ZFE"
+    },
+    {
+        "who_is_looking": "assurance Allianz",
+        "plate": "XY-789-ZA",
+        "context": "arnaque au contrat"
+    },
+    {
+        "who_is_looking": "gendarmerie des transports",
+        "plate": "BC-012-DE",
+        "context": "contrôle poids lourd"
     }
-
 ]

@@ -1,56 +1,5 @@
 [
     {
-        "id_client": 1,
-        "lat": 43.116669,
-        "long": 5.93333,
-        "string": "Ceci est un exemple de texte"
-    },
-    {
-        "id_client": 2,
-        "localisation": null,
-        "string": "Un autre texte"
-    },
-    {
-        "id_client": 3,
-        "localisation": null,
-        "string": "Encore un texte"
-    },
-    {
-        "id_client": 4,
-        "localisation": "Marseille, France",
-        "string": "Nouveau texte"
-    },
-    {
-        "id_client": 4,
-        "localisation": "Marseille, France",
-        "string": "test"
-    },
-    {
-        "id_client": 4,
-        "localisation": "Marseille, France",
-        "string": "DK-802-DV"
-    },
-    {
-        "id_client": 4,
-        "localisation": "Marseille, France",
-        "string": "DK-802-DV"
-    },
-    {
-        "id_client": 4,
-        "localisation": null,
-        "plate": "DK-802-DV"
-    },
-    {
-        "id_client": 4,
-        "localisation": null,
-        "plate": "DK-802-DW"
-    },
-    {
-        "id_client": 4,
-        "localisation": null,
-        "plate": "DK-802-DX"
-    },
-    {
         "id_client": 4,
         "lat": 43.116669,
         "long": 6.11667,
