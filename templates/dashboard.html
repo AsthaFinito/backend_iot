@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Bienvenue, {{ username }} !</h2>
+    
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3>Vos amis</h3>
+        </div>
+        <div class="card-body">
+            {% if friends %}
+            <ul class="list-group">
+                {% for friend in friends %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ friend }}
+                    <span class="badge bg-primary rounded-pill">En ligne</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>Vous n'avez pas encore d'amis. Ajoutez-en !</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <a href="{{ url_for('logout') }}" class="btn btn-danger mt-3">Déconnexion</a>
+</div>
+{% endblock %}

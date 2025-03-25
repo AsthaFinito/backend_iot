@@ -52,5 +52,197 @@
         "lat": 43.116669,
         "long": 6.11667,
         "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 1,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-803-DX"
+    },
+    {
+        "id_client": 2,
+        "lat": 43.299999,
+        "long": 5.4,
+        "plate": "CK-802-DX"
+    },
+    {
+        "id_client": 3,
+        "lat": 43.333328,
+        "long": 5.48333,
+        "plate": "DK-702-DX"
+    },
+    {
+        "id_client": 5,
+        "lat": 43.283329,
+        "long": 5.56667,
+        "plate": "DK-812-DX"
+    },
+    {
+        "id_client": 6,
+        "lat": 43.299999,
+        "long": 5.63333,
+        "plate": "DK-802-CX"
+    },
+    {
+        "id_client": 7,
+        "lat": 43.25,
+        "long": 5.61667,
+        "plate": "DK-892-DX"
+    },
+    {
+        "id_client": 8,
+        "lat": 43.216671,
+        "long": 5.53333,
+        "plate": "DK-852-DP"
+    },
+    {
+        "id_client": 9,
+        "lat": 43.166672,
+        "long": 5.6,
+        "plate": "DK-802-GX"
+    },
+    {
+        "id_client": 10,
+        "lat": 43.133331,
+        "long": 5.75,
+        "plate": "KL-802-DX"
+    },
+    {
+        "id_client": 10,
+        "lat": 43.133331,
+        "long": 5.75,
+        "plate": "KL-802-DX"
+    },
+    {
+        "id_client": 10,
+        "lat": 43.133331,
+        "long": 5.75,
+        "plate": "KL-802-DX"
+    },
+    {
+        "id_client": 11,
+        "lat": 43.099998,
+        "long": 5.88333,
+        "plate": "DK-702-DX"
+    },
+    {
+        "id_client": 12,
+        "lat": 43.116669,
+        "long": 5.8,
+        "plate": "DK-802-DS"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 1,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-803-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 1,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-803-DX"
+    },
+    {
+        "id_client": 1,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-803-DX"
+    },
+    {
+        "id_client": 3,
+        "lat": 43.333328,
+        "long": 5.48333,
+        "plate": "DK-702-DX"
+    },
+    {
+        "id_client": 3,
+        "lat": 43.333328,
+        "long": 5.48333,
+        "plate": "DK-702-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DX"
     }
 ]

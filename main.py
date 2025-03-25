@@ -1,12 +1,12 @@
-import datetime
+from datetime import datetime, timedelta
 import os
-from flask import Flask, flash, json, redirect, render_template, request, jsonify, url_for
+from flask import Flask, flash, json, redirect, render_template, request, jsonify, session, url_for
 import hashlib
 import math
 
 
 
-MAX_DISTANCE_KM = 20
+MAX_DISTANCE_KM = 30
 MAX_AGE_MINUTES = 30
 
 def distance_haversine(lat1, lon1, lat2, lon2):
@@ -64,7 +64,7 @@ def add_latest_pos(id_client, lat, long):
     positions[str(id_client)] = {
         "lat": lat,
         "long": long,
-        "timestamp": datetime.datetime.now().isoformat()  # Optionnel: ajoute un timestamp
+        "timestamp": datetime.now().isoformat()  # Optionnel: ajoute un timestamp
     }
     save_latest_positions(positions)
 
@@ -74,39 +74,48 @@ def get_friends(client_id):
     friends_data = load_friends() if callable(load_friends) else {}
     return list(friends_data.get(str(client_id), []))
 
+def transform_username_to_clientid(username):
+    with open('db/login_db.json') as f:
+       user_db = json.load(f)
+    for user in user_db:
+        if user["username"] == username:
+            return user["id_client"]
+    return None
+
 def get_nearby_friends(client_id):
+    #print("client_id",client_id)
     friends_list = get_friends(client_id)  # Liste des IDs d'amis
     client_pos = get_latest_pos(client_id)  # Position du client
-    
+    # print("friends_list",friends_list)
+    # print("client_pos",client_pos)
     if not client_pos:
         return []
 
-    current_time = datetime.datetime.now()
+    current_time = datetime.now()
     nearby_friends = []
     for friend_id in friends_list:
-        friend_pos = get_latest_pos(friend_id)
+        #print(transform_username_to_clientid(friend_id))
+        friend_pos = get_latest_pos(transform_username_to_clientid(friend_id))
+        #print("friend_pos",friend_pos)
         if not friend_pos:
             continue
         try:
             last_update = datetime.fromisoformat(friend_pos['timestamp'])
-            if (current_time - last_update) > datetime.timedelta(minutes=MAX_AGE_MINUTES):
+            if (current_time - last_update) > timedelta(minutes=MAX_AGE_MINUTES):
+                #print("Erreur timedelta")
                 continue
         except (KeyError, ValueError):
+            #print("Dans le excetp")
             continue
         distance = distance_haversine(
             client_pos['lat'], client_pos['long'],
             friend_pos['lat'], friend_pos['long']
         )
-        
+        #print("distance",distance)
         if distance <= MAX_DISTANCE_KM:
             nearby_friends.append({
                 "friend_id": str(friend_id),
                 "distance_km": round(distance, 2),
-                "last_update": friend_pos['timestamp'],
-                "position": {
-                    "lat": friend_pos['lat'],
-                    "long": friend_pos['long']
-                }
             })
     nearby_friends.sort(key=lambda x: x['distance_km'])
     
@@ -138,8 +147,9 @@ def add_entry(id_client, string, lat,long):
     add_latest_pos(id_client, lat, long)
     # print(get_latest_pos(id_client)) 
     # print(get_friends(id_client))
-    print(get_nearby_friends(id_client))
     save_data(data)
+    return get_nearby_friends(id_client)
+
 
 def is_clientid_present(client_id):
     users = load_users()  
@@ -155,12 +165,38 @@ def login():
        
         if user and user['password_hash'] == hash_password(password):
             flash('Connexion réussie!', 'success')
-            return redirect(url_for('home'))
+            session['user_id'] = user['id_client']
+            session['username'] = username
+            return redirect(url_for('dashboard'))
         else:
             flash('Identifiant ou mot de passe incorrect', 'error')
 
 
     return render_template('login.html')
+
+@app.route('/dashboard')
+def dashboard():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    user_id = session['user_id']
+    username = session['username']
+    friends_db = load_friends()
+    friend_ids = friends_db.get(str(user_id), [])
+    users_db = load_users()
+    friends = []
+    for friend_id in friend_ids:
+        friend = next((u for u in users_db if u['id_client'] == transform_username_to_clientid(friend_id)), None)
+        if friend:
+            friends.append(friend['username'])
+    
+    return render_template('dashboard.html', username=username,friends=friends)
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('Vous avez été déconnecté', 'info')
+    return redirect(url_for('login'))
 
 @app.route('/add', methods=['POST'])
 def add():
@@ -174,7 +210,10 @@ def add():
 
     if not is_clientid_present(id_client):
         return jsonify({"error": f"Client ID {id_client} non trouvé"}), 404
-    add_entry(id_client, string, lat,long)
+    if not add_entry(id_client, string, lat,long):
+        print("NO FRIEND NEAR")
+    else:
+        print("A FRIEND IS NEAR")
     if is_plate_present(string):
         print("USEFULL PLATE DETECT")
     else:
