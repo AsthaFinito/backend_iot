@@ -3,6 +3,7 @@ import os
 from flask import Flask, flash, json, redirect, render_template, request, jsonify, session, url_for
 import hashlib
 import math
+from dateutil.parser import parse
 
 
 
@@ -22,37 +23,40 @@ def distance_haversine(lat1, lon1, lat2, lon2):
     distance = R * c
     return distance
 
-
 def create_app():
     app = Flask(__name__)
-    
+
     @app.template_filter('time_since')
-    def time_since(timestamp_str):
-        """Calcule le temps écoulé en minutes depuis le timestamp"""
+    def time_since_filter(timestamp_str):
         if not timestamp_str:
-            return "Inactif"
+            return "Jamais connecté"
         
         try:
-            if timestamp_str.endswith('Z'):
-                timestamp = datetime.strptime(timestamp_str, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
-            else:
-                timestamp = datetime.fromisoformat(timestamp_str)
+            # Parse avec dateutil pour une meilleure tolérance
+            timestamp = parse(timestamp_str)
             
-            delta = datetime.now(timezone.utc) - timestamp
-            minutes = int(delta.total_seconds() / 60)
             
-            if minutes < 1:
+            # Calcule la différence
+            print(datetime.now())
+            delta = datetime.now() - timestamp
+            print(delta)
+            seconds = delta.total_seconds()
+            
+            # Formatage humain
+            if seconds < 60:
                 return "À l'instant"
-            elif minutes < 60:
-                return f"{minutes} min"
+            elif seconds < 3600:  # < 1h
+                return f"{int(seconds/60)} min"
+            elif seconds < 86400:  # < 1j
+                return f"{int(seconds/3600)}h"
             else:
-                hours = minutes // 60
-                return f"{hours}h{minutes % 60:02d}"
-        except (ValueError, TypeError):
-            return "not know"
-    
-    return app
+                return f"{int(seconds/86400)}j"
+                
+        except Exception as e:
+            app.logger.error(f"Erreur parsing timestamp {timestamp_str}: {str(e)}")
+            return "Hors ligne"
 
+    return app
 app = create_app()
 app.secret_key = 'test'
 def load_users():
@@ -219,6 +223,7 @@ def dashboard():
     friends = []
     for friend_id in friend_ids:
         latest_pos=get_latest_pos(transform_username_to_clientid(friend_id))
+        print(latest_pos)
         friend = next((u for u in users_db if u['id_client'] == transform_username_to_clientid(friend_id)), None)
         if friend:
              friends.append({
