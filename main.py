@@ -4,6 +4,11 @@ from flask import Flask, flash, json, redirect, render_template, request, jsonif
 import hashlib
 import math
 
+
+
+MAX_DISTANCE_KM = 20
+MAX_AGE_MINUTES = 30
+
 def distance_haversine(lat1, lon1, lat2, lon2):
     R = 6371.0
     lat1_rad = math.radians(lat1)
@@ -69,6 +74,44 @@ def get_friends(client_id):
     friends_data = load_friends() if callable(load_friends) else {}
     return list(friends_data.get(str(client_id), []))
 
+def get_nearby_friends(client_id):
+    friends_list = get_friends(client_id)  # Liste des IDs d'amis
+    client_pos = get_latest_pos(client_id)  # Position du client
+    
+    if not client_pos:
+        return []
+
+    current_time = datetime.datetime.now()
+    nearby_friends = []
+    for friend_id in friends_list:
+        friend_pos = get_latest_pos(friend_id)
+        if not friend_pos:
+            continue
+        try:
+            last_update = datetime.fromisoformat(friend_pos['timestamp'])
+            if (current_time - last_update) > datetime.timedelta(minutes=MAX_AGE_MINUTES):
+                continue
+        except (KeyError, ValueError):
+            continue
+        distance = distance_haversine(
+            client_pos['lat'], client_pos['long'],
+            friend_pos['lat'], friend_pos['long']
+        )
+        
+        if distance <= MAX_DISTANCE_KM:
+            nearby_friends.append({
+                "friend_id": str(friend_id),
+                "distance_km": round(distance, 2),
+                "last_update": friend_pos['timestamp'],
+                "position": {
+                    "lat": friend_pos['lat'],
+                    "long": friend_pos['long']
+                }
+            })
+    nearby_friends.sort(key=lambda x: x['distance_km'])
+    
+    return nearby_friends
+
 
 def get_latest_pos(client_id):
     positions = load_latest_positions()
@@ -93,8 +136,9 @@ def add_entry(id_client, string, lat,long):
     }
     data.append(new_entry)
     add_latest_pos(id_client, lat, long)
-    print(get_latest_pos(id_client)) 
-    print(get_friends(id_client))
+    # print(get_latest_pos(id_client)) 
+    # print(get_friends(id_client))
+    print(get_nearby_friends(id_client))
     save_data(data)
 
 @app.route('/login', methods=['GET', 'POST'])
