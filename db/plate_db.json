@@ -274,5 +274,113 @@
         "lat": 43.116669,
         "long": 6.11667,
         "plate": "DK-802-DV"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DV"
+    },
+    {
+        "id_client": 3,
+        "lat": 43.333328,
+        "long": 5.48333,
+        "plate": "DK-702-DX"
+    },
+    {
+        "id_client": 3,
+        "lat": 43.333328,
+        "long": 5.48333,
+        "plate": "DK-702-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DV"
+    },
+    {
+        "id_client": 3,
+        "lat": 43.2,
+        "long": 6.15,
+        "plate": "DK-702-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DV"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DV"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DV"
+    },
+    {
+        "id_client": 1,
+        "lat": 43.2,
+        "long": 6.15,
+        "plate": "DK-702-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DV"
+    },
+    {
+        "id_client": 1,
+        "lat": 43.2,
+        "long": 6.15,
+        "plate": "DK-702-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DV"
+    },
+    {
+        "id_client": 1,
+        "lat": 43.2,
+        "long": 6.15,
+        "plate": "DK-702-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DV"
+    },
+    {
+        "id_client": 1,
+        "lat": 43.2,
+        "long": 6.15,
+        "plate": "DK-702-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DV"
+    },
+    {
+        "id_client": 1,
+        "lat": 43.2,
+        "long": 6.15,
+        "plate": "DK-702-DX"
+    },
+    {
+        "id_client": 4,
+        "lat": 43.116669,
+        "long": 6.11667,
+        "plate": "DK-802-DV"
     }
 ]

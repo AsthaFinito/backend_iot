@@ -8,6 +8,22 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin, current_user
+from datetime import datetime
+
+db = SQLAlchemy()
+
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    message = db.Column(db.String(255), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    is_read = db.Column(db.Boolean, default=False)
+    
+    def __repr__(self):
+        return f'<Notification {self.message}>'
+
 
 MAX_DISTANCE_KM = 30
 MAX_AGE_MINUTES = 30
@@ -27,7 +43,11 @@ def distance_haversine(lat1, lon1, lat2, lon2):
 
 def create_app():
     app = Flask(__name__)
-
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+    with app.app_context():
+        db.create_all() 
     @app.template_filter('time_since')
     def time_since_filter(timestamp_str):
         if not timestamp_str:
@@ -202,6 +222,12 @@ def get_latest_pos(client_id):
         }
     return None
 
+def send_notification(user_id, message):
+    print("SENDING")
+    print(user_id)
+    notification = Notification(user_id=user_id, message=message)
+    db.session.add(notification)
+    db.session.commit()
 
 def add_entry(id_client, string, lat,long):
     data = load_data()
@@ -251,8 +277,17 @@ def dashboard():
     username = session['username']
     friends_db = load_friends()
     friend_ids = friends_db.get(str(user_id), [])
-    print(friend_ids)
+    print(user_id)
     users_db = load_users()
+    notifications = Notification.query.all()
+    print("BEFORE NOTIF 1: ")
+    for notification in notifications:
+        print(f"ID: {notification.id}, User ID: {notification.user_id}, Message: {notification.message}, Timestamp: {notification.timestamp}")
+    
+    notifications = Notification.query.filter_by(user_id=user_id).all()
+    print("BEFORE NOTIF 2: ")
+    for notification in notifications:
+        print(f"ID: {notification.id}, User ID: {notification.user_id}, Message: {notification.message}, Timestamp: {notification.timestamp}")
     
     friends = []
     for friend_id in friend_ids:
@@ -265,7 +300,7 @@ def dashboard():
                 'last_seen': latest_pos.get('timestamp') if latest_pos else None,
             })
     
-    return render_template('dashboard.html', username=username,friends=friends)
+    return render_template('dashboard.html', username=username,friends=friends,notifications=notifications)
 
 
 
@@ -287,10 +322,20 @@ def add():
 
     if not is_clientid_present(id_client):
         return jsonify({"error": f"Client ID {id_client} non trouvé"}), 404
-    if not add_entry(id_client, string, lat,long):
+    nearby_friends = add_entry(id_client, string, lat, long)
+
+    if not nearby_friends:
         print("NO FRIEND NEAR")
     else:
         print("A FRIEND IS NEAR")
+        for friend in nearby_friends:
+            send_notification(id_client, f"Votre ami {friend['friend_id']} est à {friend['distance_km']} km de vous.")
+    #         notifications = Notification.query.all()
+
+    # # Afficher les notifications dans la console
+    #         for notification in notifications:
+    #             print(f"ID: {notification.id}, User ID: {notification.user_id}, Message: {notification.message}, Timestamp: {notification.timestamp}")
+    
     if is_plate_present(string):
         print("USEFULL PLATE DETECT")
         configure_and_send_mail("test",string,None,lat,long)
@@ -301,6 +346,19 @@ def add():
 @app.route('/')
 def home():
     return "Bienvenue sur la page d'accueil!"
+
+@app.route('/notifications', methods=['GET'])
+def get_notifications():
+    if 'user_id' not in session:
+        return jsonify({'error': 'Utilisateur non connecté'}), 401
+
+    user_id = session['user_id']
+    notifications = Notification.query.filter_by(user_id=user_id, is_read=False).order_by(Notification.timestamp.desc()).all()
+
+    return jsonify([
+        {'id': n.id, 'message': n.message, 'timestamp': n.timestamp.strftime("%Y-%m-%d %H:%M:%S")}
+        for n in notifications
+    ])
 
 
 if __name__ == '__main__':
