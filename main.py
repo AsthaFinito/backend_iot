@@ -4,7 +4,9 @@ from flask import Flask, flash, json, redirect, render_template, request, jsonif
 import hashlib
 import math
 from dateutil.parser import parse
-
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 
 MAX_DISTANCE_KM = 30
@@ -32,17 +34,11 @@ def create_app():
             return "Jamais connecté"
         
         try:
-            # Parse avec dateutil pour une meilleure tolérance
             timestamp = parse(timestamp_str)
-            
-            
-            # Calcule la différence
             print(datetime.now())
             delta = datetime.now() - timestamp
             print(delta)
             seconds = delta.total_seconds()
-            
-            # Formatage humain
             if seconds < 60:
                 return "À l'instant"
             elif seconds < 3600:  # < 1h
@@ -57,6 +53,44 @@ def create_app():
             return "Hors ligne"
 
     return app
+
+
+def configure_and_send_mail(mail_addr,detected_plate,detection_time,lat,long):
+    sender_email = "projet.iot.backend@gmail.com"
+    password = "ixub prrf kmbt mygd" 
+    subject = "Dection automatique d'une plaque que vous recherchez"
+    body = f"""
+Bonjour,
+
+Nous vous informons que l'appareil de détection a détecté une plaque correspondante à vos critères de recherche.
+
+Détails de la détection :
+- Plaque détectée : {detected_plate}
+- Heure de la détection : {detection_time}
+- Localisation : {lat}, {long}
+
+Nous vous invitons à vérifier ces informations et à prendre les mesures nécessaires.
+
+Cordialement,
+L'équipe de surveillance
+"""
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = sender_email
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body, 'plain'))
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()  
+        server.login(sender_email, password)
+        text = msg.as_string()
+        server.sendmail(sender_email, sender_email, text)
+        print(f"E-mail envoyé avec succès à {mail_addr}.")
+    except Exception as e:
+        print(f"Une erreur est survenue : {e}")
+    finally:
+        server.quit()
+    
 app = create_app()
 app.secret_key = 'test'
 def load_users():
@@ -98,7 +132,7 @@ def add_latest_pos(id_client, lat, long):
     positions[str(id_client)] = {
         "lat": lat,
         "long": long,
-        "timestamp": datetime.now().isoformat()  # Optionnel: ajoute un timestamp
+        "timestamp": datetime.now().isoformat()  
     }
     save_latest_positions(positions)
 
@@ -259,6 +293,7 @@ def add():
         print("A FRIEND IS NEAR")
     if is_plate_present(string):
         print("USEFULL PLATE DETECT")
+        configure_and_send_mail("test",string,None,lat,long)
     else:
         print("NOT USEFULL PLATE")
     return jsonify({"message": "Entrée ajoutée avec succès"}), 201
